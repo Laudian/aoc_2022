@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-    static final File inFile = new File("day09/testinput2.txt");
+    static final File inFile = new File("day09/input.txt");
     static List<Point> knots = new ArrayList<>();
     static List<Map<Point, Boolean>> boards = new ArrayList<>();
     static {
@@ -23,8 +23,7 @@ public class Main {
             'U', new Point(0, -1),
             'D', new Point(0, 1),
             'L', new Point(-1, 0),
-            'R', new Point(1, 0),
-            '0', new Point(0,0)
+            'R', new Point(1, 0)
     );
     public static void main(String[] args) throws FileNotFoundException {
         Scanner inScanner = new Scanner(inFile);
@@ -66,7 +65,8 @@ public class Main {
             }
             
             tail.setLocation(tail.x+moveX, tail.y+moveY);
-            board.put(tail, true);
+            Point newtail = new Point(tail);
+            board.put(newtail, true);
         }
     }
     private static boolean isConnected(Point head, Point tail) {
