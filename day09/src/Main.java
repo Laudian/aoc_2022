@@ -31,12 +31,19 @@ public class Main {
         while (inScanner.hasNextLine()) {
             String line = inScanner.nextLine();
             String[] split = line.split(" ");
-            char dir = split[0].charAt(0);
+            Point dir = dirs.get(split[0].charAt(0));
             int moves = Integer.parseInt(split[1]);
-            for (int i=0; i<9; i++) {
-                move(dirs.get(dir), moves, knots.get(i), knots.get(i+1), boards.get(i+1));
-                moves = 1;
-                dir ='0';
+
+            Point head;
+            Point tail;
+            for (int m=0; m<moves; m++) {
+                head = knots.get(0);
+                head.setLocation(head.x+dir.x, head.y+dir.y);
+                for (int i=0; i<9; i++) {
+                    head = knots.get(i);
+                    tail = knots.get(i+1);
+                    adjust(head, tail, boards.get(i+1));
+                }
             }
         }
         
@@ -44,27 +51,22 @@ public class Main {
         System.out.println("Part 2: " + boards.get(9).size());
     }
     
-    private static void move(Point dir, int moves, Point head, Point tail, Map<Point, Boolean> board){
-        for (int i=0; i<moves; i++) {
-            head.setLocation(head.x+dir.x, head.y+dir.y);
-            if (! isConnected(head, tail)) {
-                int dx = head.x - tail.x;
-                int dy = head.y - tail.y;
-                int adx = Math.abs(dx);
-                int ady = Math.abs(dy);
-                int moveX = 0;
-                int moveY = 0;
-                
-                if (dy != 0) {
-                    moveY = dy / ady;
-                }
-                if (dx != 0) {
-                    moveX = dx / adx;
-                }
-                
-                tail.setLocation(tail.x+moveX, tail.y+moveY);
-                board.put(tail, true);
+    private static void adjust(Point head, Point tail, Map<Point, Boolean> board){
+        if (! isConnected(head, tail)) {
+            int dx = head.x - tail.x;
+            int dy = head.y - tail.y;
+            int moveX = 0;
+            int moveY = 0;
+            
+            if (dy != 0) {
+                moveY = Integer.signum(dy);
             }
+            if (dx != 0) {
+                moveX = Integer.signum(dx);
+            }
+            
+            tail.setLocation(tail.x+moveX, tail.y+moveY);
+            board.put(tail, true);
         }
     }
     private static boolean isConnected(Point head, Point tail) {
