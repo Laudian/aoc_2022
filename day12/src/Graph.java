@@ -97,6 +97,7 @@ public class Graph {
     }
     
     public int part2() {
+        Vertex oldstart = start;
         int minPath = Integer.MAX_VALUE;
         for (Vertex vertex : vertices) {
             if (vertex.getHeight() == 1) {
@@ -106,6 +107,7 @@ public class Graph {
                 reset();
             }
         }
+        start = oldstart;
         return minPath;
     }
 
